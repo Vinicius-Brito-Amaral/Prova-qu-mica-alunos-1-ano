@@ -1,0 +1,78 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+/* Container */
+#prova, #resultado {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Perguntas */
+.pergunta {
+    margin-bottom: 20px;
+}
+
+/* Botões */
+button {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Form Styling */
+form {
+    max-height: 500px;
+    overflow-y: auto; /* Permite o scroll se o conteúdo exceder a altura */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#resultado {
+    text-align: center;
+}
+
+#gabarito {
+    text-align: left;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    #prova, #resultado {
+        width: 95%;
+    }
+
+    button {
+        width: 90%;
+    }
+}

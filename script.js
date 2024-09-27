@@ -1,62 +1,69 @@
-const correctAnswers = {
-    q1: "b",
-    q2: "c",
-    q3: "b",
-    q4: "a",
-    q5: "b",
-    q6: "b"
+const respostasCorretas = {
+    q1: 'B',
+    q2: 'C',
+    q3: 'B',
+    q4: 'D',
+    q5: 'A',
+    q6: 'C',
+    q7: 'C',
+    q8: 'A'
 };
 
-const form = document.getElementById('quiz-form');
-const submitBtn = document.getElementById('submit-btn');
-const resultDiv = document.getElementById('result');
-const quizSection = document.getElementById('quiz-section');
-const startBtn = document.getElementById('start-btn');
-const startSection = document.getElementById('start-section');
+let provaEncerrada = false;
 
-function startQuiz() {
-    startSection.classList.add('hidden');
-    quizSection.classList.remove('hidden');
-    submitBtn.classList.remove('hidden');
+function iniciarProva() {
+    if (localStorage.getItem('provaEncerrada')) {
+        alert("Você já enviou a prova. O resultado final já foi exibido.");
+        exibirResultadoFinal();
+    } else {
+        document.getElementById("inicio").style.display = "none";
+        document.getElementById("prova").style.display = "block";
+    }
 }
 
-function calculateScore() {
-    let score = 0;
-    const formData = new FormData(form);
+function encerrarProva() {
+    if (!provaEncerrada) {
+        const form = document.getElementById('quizForm');
+        let score = 0;
+        let total = Object.keys(respostasCorretas).length;
+        let gabarito = '<h3>Gabarito:</h3><ul>';
 
-    for (let [question, answer] of formData.entries()) {
-        if (answer === correctAnswers[question]) {
-            score++;
+        for (let i = 1; i <= total; i++) {
+            let resposta = form['q' + i].value;
+            if (resposta === respostasCorretas['q' + i]) {
+                score++;
+                gabarito += `<li>Questão ${i}: Correta (Resposta: ${respostasCorretas['q' + i]})</li>`;
+            } else {
+                gabarito += `<li>Questão ${i}: Incorreta (Sua resposta: ${resposta}, Correta: ${respostasCorretas['q' + i]})</li>`;
+            }
         }
-    }
 
-    return score;
-}
+        gabarito += '</ul>';
+        document.getElementById('prova').style.display = 'none';
+        document.getElementById('resultado').style.display = 'block';
+        document.getElementById('score').textContent = `Você acertou ${score} de ${total} questões.`;
+        document.getElementById('gabarito').innerHTML = gabarito;
 
-function displayResult(score) {
-    const totalQuestions = Object.keys(correctAnswers).length;
-    resultDiv.textContent = `Você acertou ${score} de ${totalQuestions} perguntas.`;
-    resultDiv.classList.remove('hidden');
-}
-
-function blockRetake() {
-    quizSection.innerHTML = 'Você já completou esta prova. Não é possível refazê-la.';
-    localStorage.setItem('quizCompleted', 'true');
-}
-
-function handleSubmit() {
-    const score = calculateScore();
-    displayResult(score);
-    blockRetake();
-}
-
-function checkIfCompleted() {
-    const quizCompleted = localStorage.getItem('quizCompleted');
-    if (quizCompleted === 'true') {
-        quizSection.innerHTML = 'Você já completou esta prova. Não é possível refazê-la.';
+        // Salvar estado de prova encerrada
+        localStorage.setItem('provaEncerrada', true);
+        provaEncerrada = true;
+    } else {
+        alert("Você já enviou a prova. O resultado final já foi exibido.");
     }
 }
 
-submitBtn.addEventListener('click', handleSubmit);
-startBtn.addEventListener('click', startQuiz);
-window.onload = checkIfCompleted;
+function exibirResultadoFinal() {
+    document.getElementById('inicio').style.display = 'none';
+    document.getElementById('prova').style.display = 'none';
+    document.getElementById('resultado').style.display = 'block';
+
+    const score = localStorage.getItem('score');
+    const gabarito = localStorage.getItem('gabarito');
+    if (score && gabarito) {
+        document.getElementById('score').textContent = score;
+        document.getElementById('gabarito').innerHTML = gabarito;
+    } else {
+        document.getElementById('score').textContent = "Resultado não disponível.";
+        document.getElementById('gabarito').innerHTML = "";
+    }
+}
